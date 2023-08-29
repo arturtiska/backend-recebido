@@ -2,9 +2,9 @@ import { Controller, Post, UsePipes, ValidationPipe, Param, Body } from '@nestjs
 import { CreateAddressDto } from './dtos/createAddress.dto';
 import { AddressEntity } from './entites/address.entity';
 import { AddressService } from './address.service';
-import { UserType } from 'src/user/enum/use-type.enum';
-import { Roles } from 'src/decorators/roles.decoractors';
-import { UserId } from 'src/decorators/user-id-decorator';
+import { UserType } from '../user/enum/use-type.enum';
+import { Roles } from '../decorators/roles.decoractors';
+import { UserId } from '../decorators/user-id-decorator';
 
 @Controller('address')
 export class AddressController {

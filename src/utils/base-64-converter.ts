@@ -1,4 +1,4 @@
-import { LoginPayLoad } from "src/auth/dtos/loginpayLoad.dto"
+import { LoginPayLoad } from "../auth/dtos/loginpayLoad.dto"
 
 export const authorizationToLoginPayLoad = (authorization: string):
     LoginPayLoad | undefined => {

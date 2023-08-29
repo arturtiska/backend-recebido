@@ -1,4 +1,4 @@
-import { CityEntity } from "src/city/entites/city.entity";
+import { CityEntity } from "../../city/entites/city.entity";
 import { Column, CreateDateColumn, Entity, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
 
 

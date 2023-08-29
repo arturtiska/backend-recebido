@@ -2,8 +2,7 @@ import { Injectable, CACHE_MANAGER, Inject, NotFoundException } from '@nestjs/co
 import { CityEntity } from './entites/city.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { Cache } from 'cache-manager'
-import { CacheService } from 'src/cache/cache.service';
+import { CacheService } from '../cache/cache.service';
 
 @Injectable()
 export class CityService {
