@@ -1,10 +1,12 @@
-import { Injectable, NotFoundException, BadGatewayException } from '@nestjs/common';
+import { Injectable, NotFoundException, BadGatewayException, BadRequestException } from '@nestjs/common';
 import { CreateUserDto } from './dtos/createUser.dto';
 import { UserEntity } from './entites/user.entity';
 import { hash } from 'bcrypt';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { UserType } from './enum/use-type.enum';
+import { UpdatePasswordDto } from './dtos/update-password.dto';
+import { createPasswordhashed, validatePassword } from 'src/utils/password';
 
 @Injectable()
 export class UserService {
@@ -12,6 +14,8 @@ export class UserService {
         @InjectRepository(UserEntity)
         private readonly userRepository: Repository<UserEntity>
     ) { }
+
+
 
     async createUser(createUserDto: CreateUserDto): Promise<UserEntity> {
         const user = await this.findUserByEmail(createUserDto.email)
@@ -21,9 +25,7 @@ export class UserService {
             throw new BadGatewayException('email registered in sytem')
         }
 
-
-        const saltorRounds = 10
-        const passowordHashed = await hash(createUserDto.password, saltorRounds)
+        const passowordHashed = await createPasswordhashed(createUserDto.password);
         return this.userRepository.save({
             ...createUserDto,
             typeUser: UserType.User,
@@ -72,5 +74,22 @@ export class UserService {
             throw new NotFoundException(`Email: ${email} Not Found`)
         }
         return user
+    }
+
+    async updatePasswordUser(updatePassword: UpdatePasswordDto, userId: number): Promise<UserEntity> {
+        const user = await this.findUserById(userId)
+        const passowordHashed = await createPasswordhashed(updatePassword.newPassword)
+
+        const isMatch = await validatePassword(updatePassword.lastPassword, user.password || '')
+
+
+        if (!isMatch) {
+            throw new BadRequestException('Last password invalid')
+        }
+
+        return this.userRepository.save({
+            ...user,
+            password: passowordHashed
+        })
     }
 }
